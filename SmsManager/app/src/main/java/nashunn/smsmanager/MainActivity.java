@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/**
+ * Created by Nicolas B. for SmsManager
+ */
 public class MainActivity extends AppCompatActivity {
     private static final int SMS_PERMISSION_CODE =0 ;
     private Button btnSendSms;

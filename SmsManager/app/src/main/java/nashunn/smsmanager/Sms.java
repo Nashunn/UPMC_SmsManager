@@ -4,6 +4,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
 import android.widget.Toast;
 
+/**
+ * Created by Nicolas B. for SmsManager
+ */
 public class Sms {
     private SmsManager smsManager = SmsManager.getDefault();
 
