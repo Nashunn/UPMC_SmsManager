@@ -5,6 +5,8 @@ import android.telephony.SmsManager;
 import android.widget.Toast;
 
 /**
+ * Class that do basic actions with SMS
+ *
  * Created by Nicolas B. for SmsManager
  */
 public class Sms {

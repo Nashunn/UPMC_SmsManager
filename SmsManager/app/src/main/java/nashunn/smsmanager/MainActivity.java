@@ -2,7 +2,9 @@ package nashunn.smsmanager;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.provider.Telephony;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -11,6 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 /**
@@ -18,9 +21,13 @@ import android.widget.Toast;
  */
 public class MainActivity extends AppCompatActivity {
     private static final int SMS_PERMISSION_CODE =0 ;
+
     private Button btnSendSms;
     private EditText zone_phone;
     private EditText zone_msg;
+    private Switch switchListener;
+
+    private SmsReceiver smsReceiver = new SmsReceiver();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +39,11 @@ public class MainActivity extends AppCompatActivity {
         btnSendSms = (Button) findViewById(R.id.buttonSend);
         zone_phone = (EditText) findViewById(R.id.inputPhone);
         zone_msg = (EditText) findViewById(R.id.inputMsg);
+        switchListener = (Switch) findViewById(R.id.switchListener);
 
-        btnSendSms.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendSMS();
-            }
-        });
+        //Listeners
+        setSmsReceiver();
+        setMainListeners();
     }
 
 
@@ -130,4 +135,55 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
+    /**
+     * Set listeners of mainActivity
+     */
+    private void setMainListeners() {
+        // Listeners
+        switchListener.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activeSmsBcListener();
+            }
+        });
+        btnSendSms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendSMS();
+            }
+        });
+    }
+
+    /**
+     * Active or desactive the Sms broadcast Listener
+     */
+    public void activeSmsBcListener() {
+        //Register the listener
+        if(switchListener.isChecked()) {
+            registerReceiver(smsReceiver, new IntentFilter(Telephony.Sms.Intents.SMS_RECEIVED_ACTION));
+            Toast.makeText(MainActivity.this, "Listenning SMS", Toast.LENGTH_SHORT).show();
+        }
+        //Unregister the listener
+        else {
+            unregisterReceiver(smsReceiver);
+            Toast.makeText(MainActivity.this, "Listenning SMS", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Set properly the SmsReceiver
+     */
+    public void setSmsReceiver() {
+        //Set conditions
+        SmsReceiver.SetSmsBroadcastReceiverConditions("", "@SMS");
+
+        activeSmsBcListener(); //active or not the listener
+
+        smsReceiver.setListener(new SmsListener() {
+            @Override
+            public void onTextReceived(String text) {
+                Toast.makeText(MainActivity.this, "Sms received : "+text, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
