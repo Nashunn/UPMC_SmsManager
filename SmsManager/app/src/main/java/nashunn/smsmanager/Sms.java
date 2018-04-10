@@ -10,9 +10,9 @@ import android.widget.Toast;
  * Created by Nicolas B. for SmsManager
  */
 public class Sms {
-    private SmsManager smsManager = SmsManager.getDefault();
+    private static SmsManager smsManager = SmsManager.getDefault();
 
-    public void send(AppCompatActivity context, String phone, String msg) {
+    public static void send(AppCompatActivity context, String phone, String msg) {
         smsManager.sendTextMessage(phone, null, msg, null, null);
     }
 }

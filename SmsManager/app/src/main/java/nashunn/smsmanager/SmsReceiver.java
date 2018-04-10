@@ -79,24 +79,24 @@ public class SmsReceiver extends BroadcastReceiver {
             if(listener != null) {
                 // Listen all
                 if(serviceProviderNumberCondition.equals("") && serviceProviderContentCondition.equals(""))
-                    listener.onTextReceived(smsBody); //notify
+                    listener.onTextReceived(smsSender, smsBody); //notify
 
                 // Listen only when number corresponds to conditions
                 else if(!serviceProviderNumberCondition.equals("") && serviceProviderContentCondition.equals("")) {
                     if(smsSender.equals(serviceProviderNumberCondition))
-                        listener.onTextReceived(smsBody); //notify
+                        listener.onTextReceived(smsSender, smsBody); //notify
                 }
 
                 // Listen only when content start with conditions
                 else if(serviceProviderNumberCondition.equals("") && !serviceProviderContentCondition.equals("")) {
                     if(smsBody.startsWith(serviceProviderContentCondition))
-                        listener.onTextReceived(smsBody); //notify
+                        listener.onTextReceived(smsSender, smsBody); //notify
                 }
 
                 // Listen only when number and content corresponds to conditions
                 else {
                     if(smsSender.equals(serviceProviderNumberCondition) && smsBody.startsWith(serviceProviderContentCondition))
-                        listener.onTextReceived(smsBody); //notify
+                        listener.onTextReceived(smsSender, smsBody); //notify
                 }
             }
         }

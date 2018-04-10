@@ -6,5 +6,5 @@ package nashunn.smsmanager;
  * Created by Nicolas B. for SmsManager
  */
 public interface SmsListener {
-    void onTextReceived(String text);
+    void onTextReceived(String number, String text);
 }

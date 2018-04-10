@@ -51,14 +51,13 @@ public class MainActivity extends AppCompatActivity {
      * Send a sms with informations from inputs on main activity
      */
     private void sendSMS() {
-        Sms sms = new Sms();
         String phone = String.valueOf(zone_phone.getText());
         String msg = String.valueOf(zone_msg.getText());
 
         Toast.makeText(MainActivity.this, "Sms : "+phone+" -> "+msg, Toast.LENGTH_SHORT).show();
 
         if (phone != null && msg != null)
-            sms.send(MainActivity.this, phone, msg);
+            Sms.send(MainActivity.this, phone, msg);
         else
             Toast.makeText(MainActivity.this, "Missing informations !", Toast.LENGTH_SHORT).show();
 
@@ -171,18 +170,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Set properly the SmsReceiver
+     * Set properly the SmsReceiver and conditions used to listen sms
      */
     public void setSmsReceiver() {
         //Set conditions
         SmsReceiver.SetSmsBroadcastReceiverConditions("", "@SMS");
 
-        activeSmsBcListener(); //active or not the listener
+        activeSmsBcListener(); //active the listener if switch is checked
 
         smsReceiver.setListener(new SmsListener() {
             @Override
-            public void onTextReceived(String text) {
+            public void onTextReceived(String number, String text) {
                 Toast.makeText(MainActivity.this, "Sms received : "+text, Toast.LENGTH_SHORT).show();
+                Sms.send(MainActivity.this, number, "Your sms has been received");
             }
         });
     }
